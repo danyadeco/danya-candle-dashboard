@@ -4,42 +4,37 @@ A Streamlit dashboard for managing candle inventory, sales and profit.
 
 ---
 
-##  Version 1.0 - First Release
+## Version 1.0 - First Release
 
 ### Features
+
 - Add Product
+  Add new candle products with sale price, cost price and stock quantity.
+
 - View Product List
+  Display all products stored in the inventory database.
+
 - Update Product
+  Edit product prices and stock levels.
+
 - Delete Product
+  Remove products from the database.
+
 - Record Sales
+  Register new sales transactions.
+
 - Automatic Stock Reduction
+  Automatically decrease inventory after each sale.
+
 - Profit Calculation
+  Calculate profit based on sale price and cost price.
+
 - Inventory Tracking
+  Monitor available stock for all products.
+
 - Business Dashboard Metrics
+  Display key business metrics for inventory and sales management.
 
-### Technologies Used
-- Python
-- Streamlit
-- SQLite
-- Pandas
-- Git
-- GitHub
-
----
-
-##  Database Tables
-
-### Products
-- ID
-- Candle Name
-- Sale Price
-- Cost Price
-- Stock
-
-### Sales
-- Product ID
-- Quantity Sold
-- Sale Date
 
 ---
 ## Version 1.1 - Sales Analytics Update
