@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import database
-
+import matplotlib.pyplot as plt
 #====================================
 # TITLE
 #====================================
@@ -151,6 +151,7 @@ if st.button("Update Product"):
 #====================================
 st.write("## Record Sale")
 
+
 sale_product_id = st.number_input(
 
     "Product ID",
@@ -190,3 +191,141 @@ if st.button("Record Sale"):
     )
 
     st.success("Sale recorded and stock updated!")
+#====================================
+# SALE HISTORY
+#====================================
+st.write("## Sales History")
+
+sales = database.get_sales()
+
+sales_df = pd.DataFrame(
+    sales,
+    columns=[
+        "Sale ID",
+        "Product ID",
+        "Quantity",
+        "Sale Date"
+    ]
+)
+
+st.dataframe(sales_df)
+
+# -------------------------
+# REVENUE DASHBOARD
+# -------------------------
+
+st.write("## Revenue Dashboard")
+
+sales_data = database.get_sales_details()
+
+revenue = 0
+cost = 0
+units_sold = 0
+
+for sale in sales_data:
+    sale_price = sale[1]
+    cost_price = sale[2]
+    quantity = sale[3]
+
+    revenue += sale_price * quantity
+    cost += cost_price * quantity
+    units_sold += quantity
+
+profit = revenue - cost
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(
+        "Revenue",
+        f"{revenue:,.0f}"
+    )
+
+with col2:
+    st.metric(
+        "Cost",
+        f"{cost:,.0f}"
+    )
+
+with col3:
+    st.metric(
+        "Profit",
+        f"{profit:,.0f}"
+    )
+
+with col4:
+    st.metric(
+        "Units Sold",
+        units_sold
+    )
+# -------------------------
+# BEST SELLER
+# -------------------------
+
+st.write("## Best Seller")
+
+best_seller = database.get_best_seller()
+
+if best_seller:
+    st.success(
+        f"🏆 {best_seller[0]} ({best_seller[1]} sold)"
+    )
+else:
+    st.info("No sales recorded yet.")
+
+# -------------------------
+# LOW STOCK ALERT
+# -------------------------
+
+st.write("## Low Stock Alert")
+
+low_stock_products = df[df["Stock"] <= 3]
+
+if len(low_stock_products) > 0:
+    st.warning("Some products are running low!")
+
+    st.dataframe(
+        low_stock_products[
+            [
+                "ID",
+                "Candle Name",
+                "Stock"
+            ]
+        ]
+    )
+
+else:
+    st.success(
+        "All products have sufficient stock."
+    )
+# -------------------------
+# SALES CHART
+# -------------------------
+
+st.write("## Sales Chart")
+
+chart_data = database.get_sales_chart_data()
+
+if chart_data:
+
+    names = []
+    quantities = []
+
+    for item in chart_data:
+        names.append(item[0])
+        quantities.append(item[1])
+
+    names = [name.split(" Candle")[0] for name in names]    
+
+    fig, ax = plt.subplots(figsize=(8,4))
+
+    ax.bar(
+        names,
+        quantities
+    )
+
+    ax.set_title("Products Sales")
+
+    ax.set_ylabel("Units Sold")
+    plt.xticks(rotation=45)
+    st.pyplot(fig)

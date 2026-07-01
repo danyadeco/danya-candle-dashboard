@@ -135,3 +135,100 @@ def decrease_stock(product_id, quantity):
 
     connection.commit()
     connection.close()
+#=======================================
+# GET SALES
+#=======================================
+
+def get_sales():
+    connection = sqlite3.connect("candles.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    SELECT id, product_id, quantity, sale_date
+    FROM sales
+    """)
+
+    sales = cursor.fetchall()
+
+    connection.close()
+
+    return sales
+
+
+def get_sales_details():
+
+    connection = sqlite3.connect("candles.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    SELECT
+        products.name,
+        products.sale_price,
+        products.cost_price,
+        sales.quantity
+    FROM sales
+    JOIN products
+    ON sales.product_id = products.id
+    """)
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
+#=================================
+# BEST SELLER
+#=================================
+
+def get_best_seller():
+    connection = sqlite3.connect("candles.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    SELECT
+        products.name,
+        SUM(sales.quantity) as total_sold
+    FROM sales
+    JOIN products
+    ON sales.product_id = products.id
+    GROUP BY products.name
+    ORDER BY total_sold DESC
+    LIMIT 1
+    """)
+
+    best_seller = cursor.fetchone()
+
+    connection.close()
+
+    return best_seller
+#=======================================
+# SALES CHART DATA
+#=======================================
+
+def get_sales_chart_data():
+
+    connection = sqlite3.connect("candles.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    SELECT
+        products.name,
+        SUM(sales.quantity)
+    FROM sales
+    JOIN products
+    ON sales.product_id = products.id
+    GROUP BY products.name
+    ORDER BY SUM(sales.quantity) DESC
+    """)
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+
