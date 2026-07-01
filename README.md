@@ -42,13 +42,3 @@ A Streamlit dashboard for managing candle inventory, sales and profit.
 - Sale Date
 
 ---
-
-##  Planned Features for Version 2.0
-
-- Sales History
-- Revenue Dashboard
-- Best Seller Product
-- Low Stock Alerts
-- Charts and Analytics
-- Product Search
-- Excel Export
